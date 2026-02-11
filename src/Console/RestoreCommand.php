@@ -32,7 +32,7 @@ class RestoreCommand extends Command
     public function handle(): int
     {
         try {
-            $this->initialize();
+            $this->initializeRestore();
         } catch (\Exception $e) {
             $this->error($e->getMessage());
             return self::FAILURE;
@@ -79,7 +79,7 @@ class RestoreCommand extends Command
         return $this->restoreBackup($backup);
     }
 
-    protected function initialize(): void
+    protected function initializeRestore(): void
     {
         $connectionName = $this->option('sync-connection') ?? config('db-sync.default', 'production');
         $connectionConfig = config("db-sync.connections.{$connectionName}");
