@@ -228,6 +228,11 @@ class PgsqlAdapter implements DatabaseAdapterInterface
                 continue;
             }
 
+            // Skip psql meta-commands (\restrict, \unrestrict, etc.)
+            if (str_starts_with($line, '\\')) {
+                continue;
+            }
+
             if (str_starts_with($line, 'SET ') || str_starts_with($line, 'SELECT pg_catalog.set_config')) {
                 continue;
             }
