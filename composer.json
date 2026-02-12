@@ -1,6 +1,6 @@
 {
-    "name": "artemyurov/laravel-db-sync",
-    "description": "Laravel package for synchronizing databases from remote servers via SSH tunnel",
+    "name": "artemyurov/laravel-incremental-db-sync",
+    "description": "Laravel package for incremental database synchronization from remote servers via SSH tunnel",
     "keywords": [
         "laravel",
         "database",

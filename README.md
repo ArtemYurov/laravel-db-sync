@@ -1,6 +1,6 @@
-# Laravel DB Sync
+# Laravel Incremental DB Sync
 
-Laravel package for synchronizing PostgreSQL databases from remote servers via SSH tunnel.
+Laravel package for incremental PostgreSQL database synchronization from remote servers via SSH tunnel.
 
 Supports incremental sync, full refresh (DROP + CREATE), automatic backups, foreign key dependency resolution, and self-referencing table handling.
 
@@ -15,7 +15,7 @@ Supports incremental sync, full refresh (DROP + CREATE), automatic backups, fore
 ## Installation
 
 ```bash
-composer require artemyurov/laravel-db-sync --dev
+composer require artemyurov/laravel-incremental-db-sync --dev
 ```
 
 Publish the configuration file:
@@ -197,6 +197,12 @@ Key services:
 | `DataSyncer` | Batch INSERT/UPSERT/DELETE operations |
 | `SchemaManager` | Schema dump/restore, structure comparison |
 | `BackupManager` | Backup creation, restore, cleanup |
+
+## Docker & DDEV
+
+This package requires SSH tunnels to work. For Docker and DDEV setup (SSH agent forwarding, autossh installation), see the [Docker & DDEV section](https://github.com/ArtemYurov/laravel-autossh-tunnel#docker--ddev) in laravel-autossh-tunnel documentation.
+
+Additionally, install `postgresql-client` (`pg_dump`, `psql`) in your container for schema operations.
 
 ## Adding Database Drivers
 
