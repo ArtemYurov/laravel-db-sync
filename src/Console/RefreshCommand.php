@@ -224,7 +224,7 @@ class RefreshCommand extends BaseDbSyncCommand
 
     protected function confirmRefresh(): bool
     {
-        if ($this->option('force')) {
+        if ($this->option('force') || !$this->input->isInteractive()) {
             return true;
         }
 

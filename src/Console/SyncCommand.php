@@ -74,18 +74,6 @@ class SyncCommand extends BaseDbSyncCommand
             // Sync plan
             $tablesToSync = $this->buildSyncPlan($analysis, $tablesToRefresh);
 
-            // Backup (if there are changes)
-            if (!empty($tablesToRefresh) || !empty($viewsToRefresh) || !empty($tablesToSync)) {
-                if (!$this->option('skip-backup') && !$this->option('dry-run')) {
-                    $this->info('Creating local database backup...');
-                    if (!$this->createLocalBackup()) {
-                        return self::FAILURE;
-                    }
-                    $this->info('   ✓ Backup created');
-                    $this->newLine();
-                }
-            }
-
             // Structural changes info
             if (!empty($tablesToRefresh) || !empty($viewsToRefresh)) {
                 if (!empty($refreshInfo['missing_tables'])) {
@@ -130,6 +118,16 @@ class SyncCommand extends BaseDbSyncCommand
             if (!$this->confirmSync()) {
                 $this->info('Operation cancelled.');
                 return self::SUCCESS;
+            }
+
+            // Backup (after confirmation, before modifications)
+            if (!$this->option('skip-backup')) {
+                $this->info('Creating local database backup...');
+                if (!$this->createLocalBackup()) {
+                    return self::FAILURE;
+                }
+                $this->info('   ✓ Backup created');
+                $this->newLine();
             }
 
             // DROP+CREATE tables with changed structure
@@ -630,7 +628,7 @@ class SyncCommand extends BaseDbSyncCommand
 
     protected function confirmSync(): bool
     {
-        if ($this->option('force')) {
+        if ($this->option('force') || !$this->input->isInteractive()) {
             return true;
         }
 

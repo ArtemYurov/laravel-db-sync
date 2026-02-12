@@ -147,7 +147,7 @@ class RestoreCommand extends Command
 
     protected function confirmRestore(array $backup): bool
     {
-        if ($this->option('force')) {
+        if ($this->option('force') || !$this->input->isInteractive()) {
             return true;
         }
 
