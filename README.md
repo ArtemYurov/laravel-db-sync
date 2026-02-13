@@ -202,7 +202,11 @@ Key services:
 
 This package requires SSH tunnels to work. For Docker and DDEV setup (SSH agent forwarding, autossh installation), see the [Docker & DDEV section](https://github.com/ArtemYurov/laravel-autossh-tunnel#docker--ddev) in laravel-autossh-tunnel documentation.
 
-Additionally, install `postgresql-client` (`pg_dump`, `psql`) in your container for schema operations.
+Add `postgresql-client` to your Dockerfile for schema operations (`pg_dump`, `psql`):
+
+```dockerfile
+RUN apt-get update && apt-get install -y postgresql-client
+```
 
 ## Adding Database Drivers
 
