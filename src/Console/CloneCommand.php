@@ -71,10 +71,10 @@ class CloneCommand extends BaseDbSyncCommand
             if ($this->option('include-excluded')) {
                 $syncTableNames = $allTableNames;
             } else {
-                $syncTableNames = array_values(array_filter(
-                    $allTableNames,
-                    fn ($table) => !in_array($table, $excludedTables)
-                ));
+                $requestedTables = $this->option('tables')
+                    ? array_map('trim', explode(',', $this->option('tables')))
+                    : [];
+                $syncTableNames = $this->filterExcludedTables($allTableNames, $excludedTables, $requestedTables);
                 $excludedCount = count($allTableNames) - count($syncTableNames);
                 if ($excludedCount > 0) {
                     $this->info("   Excluded from data sync: {$excludedCount} tables (structure will be created)");

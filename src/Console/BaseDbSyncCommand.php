@@ -202,6 +202,22 @@ abstract class BaseDbSyncCommand extends Command
     }
 
     /**
+     * Filter excluded tables, but keep ones explicitly requested via --tables
+     *
+     * @param  array  $tableNames  All tables
+     * @param  array  $excludedTables  Tables from excluded_tables config
+     * @param  array  $requestedTables  Tables explicitly requested via --tables
+     * @return array
+     */
+    protected function filterExcludedTables(array $tableNames, array $excludedTables, array $requestedTables = []): array
+    {
+        return array_values(array_filter(
+            $tableNames,
+            fn ($table) => !in_array($table, $excludedTables) || in_array($table, $requestedTables)
+        ));
+    }
+
+    /**
      * Reset internal state
      */
     protected function resetState(): void

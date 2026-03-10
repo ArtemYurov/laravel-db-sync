@@ -226,7 +226,10 @@ class PullCommand extends BaseDbSyncCommand
         $tableNames = $this->withTunnelRetry(fn () => $this->adapter->getTablesList($this->sourceConnection()));
 
         if (!$this->option('include-excluded')) {
-            $tableNames = array_filter($tableNames, fn ($table) => !in_array($table, $this->syncConfig->excludedTables));
+            $requestedTables = $this->option('tables')
+                ? array_map('trim', explode(',', $this->option('tables')))
+                : [];
+            $tableNames = $this->filterExcludedTables($tableNames, $this->syncConfig->excludedTables, $requestedTables);
         }
         if ($this->option('tables')) {
             $requestedTables = array_map('trim', explode(',', $this->option('tables')));
