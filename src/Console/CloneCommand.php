@@ -110,10 +110,7 @@ class CloneCommand extends BaseDbSyncCommand
                 $this->info("   • {$table}");
             }
 
-            $excludedInScope = array_values(array_filter(
-                $allTableNames,
-                fn ($table) => in_array($table, $excludedTables)
-            ));
+            $excludedInScope = $this->getExcludedInScope($allTableNames, $excludedTables, $syncTableNames);
             if (!empty($excludedInScope) && !$this->option('include-excluded')) {
                 $this->newLine();
                 $this->info('Tables to refresh (structure only, no data):');

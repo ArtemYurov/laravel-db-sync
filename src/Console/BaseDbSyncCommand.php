@@ -218,6 +218,18 @@ abstract class BaseDbSyncCommand extends Command
     }
 
     /**
+     * Таблицы в скоупе, которые excluded и НЕ запрошены явно через --tables
+     * (для отображения "structure only, no data")
+     */
+    protected function getExcludedInScope(array $allTableNames, array $excludedTables, array $syncTableNames): array
+    {
+        return array_values(array_filter(
+            $allTableNames,
+            fn ($table) => in_array($table, $excludedTables) && !in_array($table, $syncTableNames)
+        ));
+    }
+
+    /**
      * Reset internal state
      */
     protected function resetState(): void
