@@ -204,10 +204,19 @@ Key services:
 
 This package requires SSH tunnels to work. For Docker and DDEV setup (SSH agent forwarding, autossh installation), see the [Docker & DDEV section](https://github.com/ArtemYurov/laravel-autossh-tunnel#docker--ddev) in laravel-autossh-tunnel documentation.
 
-Add `postgresql-client` to your Dockerfile for schema operations (`pg_dump`, `psql`):
+Add `postgresql-client` to your Dockerfile for schema operations (`pg_dump`, `psql`).
+
+**Important:** The `pg_dump` version must be **>= the PostgreSQL server version**. Debian base images ship with older versions (e.g. Bookworm includes PG 15), so you may need the official PostgreSQL APT repository:
 
 ```dockerfile
+# If the Debian pg_dump version matches your server — this is enough:
 RUN apt-get update && apt-get install -y postgresql-client
+
+# If the server is newer (e.g. PG 18 on Bookworm) — add the pgdg repository:
+RUN curl -fsSL https://www.postgresql.org/media/keys/ACCC4CF8.asc -o /usr/share/keyrings/pgdg.asc \
+    && echo "deb [signed-by=/usr/share/keyrings/pgdg.asc] http://apt.postgresql.org/pub/repos/apt bookworm-pgdg main" \
+       > /etc/apt/sources.list.d/pgdg.list \
+    && apt-get update && apt-get install -y --no-install-recommends postgresql-client-18
 ```
 
 ## Adding Database Drivers
